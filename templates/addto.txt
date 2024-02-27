@@ -1,3 +1,0 @@
-Add the following to the project file:
-Intouch Data source:.cs
-<CopyDocumentationFilesFromPackages>true</CopyDocumentationFilesFromPackages>
