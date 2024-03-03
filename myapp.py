@@ -1,48 +1,47 @@
 #importing the flask class . An instance of this class will be
 #the WSGI application
-from flask import Flask, redirect, url_for ,request, render_template, abort
+from flask import Flask, redirect, url_for ,request, render_template
 
 #creating an instance of the FLask Class
 app = Flask(__name__)
 
 
-
-PRODUCTS = {
-    'iphone':
-    {
-        'name':'Iphone 5s',
-        'category':'phone',
-        'price': 699
-    },
-    'galaxy':
-    {
-        'name':'Samsung galazy 5', 
-        'category':'phones',
-        'price':649
-    },
-    'ipad-air': 
-    {
-        'name': 'iPad Air',
-        'category': 'Tablets',
-        'price': 649,
-    },
-    'ipad-mini': {
-        'name': 'iPad Mini',
-        'category': 'Tablets',
-        'price': 549
-    }  
-}
-
-@app.route('/')
-@app.route('/home')
+#define the homepage
+@app.route("/")
 def home():
-    return render_template('home.html', products=PRODUCTS)
+    return render_template("items.html", content="Passing this from backend")
 
-@app.route('/product/<key>')
-def product(key):
-    product=PRODUCTS.get(key)
-    if not product:
-        abort(404)
-    return render_template('product.html',product=product)
-if __name__ =='__main__':
+@app.route("/login" , methods=["POST" , "GET"])
+def login():
+    if request.method == "POST":
+        user = request.form["email"]
+        return redirect(url_for("user", usr=user))
+    else:
+        return render_template("login.html")
+
+@app.route('/navpage') 
+def navpage(): 
+    return render_template('navpage.html')
+
+@app.route('/read-form', methods=['POST']) 
+def read_form(): 
+  
+    # Get the form data as Python ImmutableDict datatype  
+    data = request.form 
+    return render_template("formdata.html" ,  content=data )
+    ## Return the extracted information  
+
+@app.route('/items')
+def items():
+    return render_template('items.html')
+
+
+
+
+@app.route("/<usr>")
+def user(usr):
+    return f"<h1>{usr}</h1>"
+
+
+if __name__ =="__main__":
     app.run(host='0.0.0.0' , debug=True)
