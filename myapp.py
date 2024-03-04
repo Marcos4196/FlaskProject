@@ -19,28 +19,31 @@ def login():
     else:
         return render_template("login.html")
 
-@app.route('/navpage') 
-def navpage(): 
-    return render_template('navpage.html')
 
 @app.route('/read-form', methods=['POST']) 
 def read_form(): 
   
     # Get the form data as Python ImmutableDict datatype  
     data = request.form 
-    return render_template("formdata.html" ,  content=data )
+    response = ""
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'submit':
+            response = "infosubmited"
+        if request.form['submit_button'] == 'register':
+            response = "registered"
+    return render_template("formdata.html" ,  content=response )
     ## Return the extracted information  
 
 @app.route('/items')
 def items():
     return render_template('items.html')
 
+@app.route("/user")
+def user():
+    return render_template("user.html")
 
 
 
-@app.route("/<usr>")
-def user(usr):
-    return f"<h1>{usr}</h1>"
 
 
 if __name__ =="__main__":
