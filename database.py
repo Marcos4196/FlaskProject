@@ -12,4 +12,11 @@ con.execute('''
             password text NOT NULL
             );
 ''')
+
+con.execute(''' 
+    CREATE TABLE IF NOT EXISTS tasks (
+            taskName text ,
+            description text PRIMARY KEY NOT NULL
+            );
+''')
 con.close()

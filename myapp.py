@@ -51,7 +51,7 @@ def read_form():
             cur.execute("SELECT 1 FROM users WHERE email = ? ", (data["userEmail"],))
             result = cur.fetchone()
             if result != data["userEmail"]:
-                return render_template("formdata.html" ,  content="User does not exist" )
+                return render_template("user.html" ,  content= data["userEmail"])
 
             
             return render_template("formdata.html" ,  content=data['userEmail'] )
@@ -79,9 +79,9 @@ def display_users():
 def items():
     return render_template('items.html')
 
-@app.route("/user")
-def user():
-    return render_template("user.html" , content="test")
+@app.route("/user/<usr>")
+def user(usr):
+    return render_template("user.html" , content=usr)
 
 
 
