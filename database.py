@@ -7,8 +7,8 @@ con = sqlite3.connect('mydatabase.db')
 
 con.execute(''' 
     CREATE TABLE IF NOT EXISTS users (
-            id INTEGER ,
-            email text PRIMARY KEY NOT NULL,
+            id INTEGER PRIMARY KEY ,
+            email text  NOT NULL,
             password text NOT NULL
             );
 ''')
@@ -16,7 +16,7 @@ con.execute('''
 con.execute(''' 
     CREATE TABLE IF NOT EXISTS tasks (
             taskName text ,
-            description text PRIMARY KEY NOT NULL
+            description text NOT NULL
             );
 ''')
 con.close()

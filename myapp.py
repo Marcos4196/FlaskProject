@@ -46,25 +46,31 @@ def read_form():
     if request.method == 'POST':
         if request.form['submit_button'] == 'submit':
             data = request.form
-            #con = sqlite3.connect('mydatabase.db')
-            #cur = con.cursor()
-            cur.execute("SELECT 1 FROM users WHERE email = ? ", (data["userEmail"],))
+            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
             result = cur.fetchone()
-            if result != data["userEmail"]:
-                return render_template("user.html" ,  content= data["userEmail"])
+            if result[1] == data["userEmail"] and result[2]==data["userPassword"]:
+                return redirect(url_for("user" , usr=data["userEmail"] ))
+            if result[1] == data["userEmail"] and result[2]!=data["userPassword"]:
+            
+                return render_template("login.html"  )
 
             
-            return render_template("formdata.html" ,  content=data['userEmail'] )
+            
         if request.form['submit_button'] == 'register':
             data = request.form
-            #con = sqlite3.connect('mydatabase.db')
-            ascii_values = [ord(c) for c in data["userEmail"]]
-            
-            id = randint(1,999) + sum(ascii_values)
-            cur.execute("INSERT INTO USERS VALUES(?,?,?)", (id, data["userEmail"] , data["userPassword"]))
-            con.commit()
-            
-            return render_template("user.html" ,  content=data["userEmail"] )
+            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
+            result = cur.fetchone()
+            if result[1] == data["userEmail"] :
+                return render_template("login.html" , content="User Already Exists" )
+            else:
+            #creating a random ID for user. 
+                ascii_values = [ord(c) for c in data["userEmail"]]
+                
+                id = randint(1,999) + sum(ascii_values)
+                cur.execute("INSERT INTO USERS VALUES(?,?,?)", (id, data["userEmail"] , data["userPassword"]))
+                con.commit()
+                
+                return redirect(url_for("user" , usr=data["userEmail"] ))
     #return render_template("formdata.html" ,  content=response )
     ## Return the extracted information  
 
@@ -79,12 +85,9 @@ def display_users():
 def items():
     return render_template('items.html')
 
-@app.route("/user/<usr>")
+@app.route("/<usr>")
 def user(usr):
-    return render_template("user.html" , content=usr)
-
-
-
+    return render_template("user.html" , usr="user" , content=usr)
 
 
 if __name__ =="__main__":
