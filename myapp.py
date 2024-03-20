@@ -52,7 +52,7 @@ def read_form():
                 return redirect(url_for("user" , usr=data["userEmail"] ))
             if result[1] == data["userEmail"] and result[2]!=data["userPassword"]:
             
-                return render_template("login.html"  )
+                return render_template("login.html" , content="Incorrect Password" )
 
             
             
@@ -60,12 +60,11 @@ def read_form():
             data = request.form
             cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
             result = cur.fetchone()
-            if result[1] == data["userEmail"] :
+            if result != None :
                 return render_template("login.html" , content="User Already Exists" )
             else:
             #creating a random ID for user. 
                 ascii_values = [ord(c) for c in data["userEmail"]]
-                
                 id = randint(1,999) + sum(ascii_values)
                 cur.execute("INSERT INTO USERS VALUES(?,?,?)", (id, data["userEmail"] , data["userPassword"]))
                 con.commit()
