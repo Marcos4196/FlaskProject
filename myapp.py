@@ -30,46 +30,7 @@ def home():
 
 @app.route("/login" , methods=["POST" , "GET"])
 def login():
-    if request.method == "POST":
-        user = request.form["email"]
-        return redirect(url_for("user", usr=user))
-    else:
-        return render_template("login.html")
-
-
-@app.route('/read-form', methods=['POST']) 
-def read_form(): 
-  
-    # Get the form data as Python ImmutableDict datatype  
-    data = request.form 
-    response = ""
-    if request.method == 'POST':
-        if request.form['submit_button'] == 'submit':
-            data = request.form
-            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
-            result = cur.fetchone()
-            if result[1] == data["userEmail"] and result[2]==data["userPassword"]:
-                return redirect(url_for("user" , usr=data["userEmail"] ))
-            if result[1] == data["userEmail"] and result[2]!=data["userPassword"]:
-            
-                return render_template("login.html" , content="Incorrect Password" )
-
-            
-            
-        if request.form['submit_button'] == 'register':
-            data = request.form
-            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
-            result = cur.fetchone()
-            if result != None :
-                return render_template("login.html" , content="User Already Exists" )
-            else:
-            #creating a random ID for user. 
-                ascii_values = [ord(c) for c in data["userEmail"]]
-                id = randint(1,999) + sum(ascii_values)
-                cur.execute("INSERT INTO USERS VALUES(?,?,?)", (id, data["userEmail"] , data["userPassword"]))
-                con.commit()
-                
-                return redirect(url_for("user" , usr=data["userEmail"] ))
+    
     #return render_template("formdata.html" ,  content=response )
     ## Return the extracted information  
 
@@ -84,7 +45,7 @@ def display_users():
 def items():
     return render_template('items.html')
 
-@app.route("/<usr>")
+@app.route("/")
 def user(usr):
     return render_template("user.html" , usr="user" , content=usr)
 
