@@ -30,9 +30,6 @@ def home():
 
 @app.route("/login" , methods=["POST" , "GET"])
 def login():
-<<<<<<< Updated upstream
-    
-=======
     if request.method == "POST":
         user = request.form["email"]
         return redirect(url_for("user", usr=user))
@@ -52,7 +49,7 @@ def read_form():
             cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
             result = cur.fetchone()
             if result is None :
-                return render_template("login.html" , content="Fields cant be blank" )
+                return render_template("login.html" , content="User Not Found" )
             if result[1] == data["userEmail"] and result[2]==data["userPassword"]:
                 return redirect(url_for("user" , usr=data["userEmail"] ))
             if result[1] == data["userEmail"] and result[2]!=data["userPassword"]:
@@ -82,7 +79,7 @@ def read_form():
             cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
             result = cur.fetchone()
             if result is None :
-                return render_template("login.html" , content="Fields cant be blank" )
+                return render_template("login.html" , content="User Not Found" )
             if result[1] == data["userEmail"] and result[2]==data["userPassword"]:
                 cur.execute("DELETE FROM USERS where email = ? ",[data["userEmail"]])
                 con.commit()
@@ -93,7 +90,6 @@ def read_form():
             
             
 
->>>>>>> Stashed changes
     #return render_template("formdata.html" ,  content=response )
     ## Return the extracted information  
 
@@ -108,7 +104,7 @@ def display_users():
 def items():
     return render_template('items.html')
 
-@app.route("/")
+@app.route("/<usr>")
 def user(usr):
     return render_template("user.html" , usr="user" , content=usr)
 
