@@ -26,11 +26,74 @@ unique_sequence = unique_id()
 #define the homepage
 @app.route("/")
 def home():
-    return render_template("items.html", content="Passing this from backend")
+    return render_template("Login.html")
 
 @app.route("/login" , methods=["POST" , "GET"])
 def login():
+<<<<<<< Updated upstream
     
+=======
+    if request.method == "POST":
+        user = request.form["email"]
+        return redirect(url_for("user", usr=user))
+    else:
+        return render_template("login.html")
+
+
+@app.route('/read-form', methods=['POST']) 
+def read_form(): 
+  
+    # Get the form data as Python ImmutableDict datatype  
+    data = request.form 
+    response = ""
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'submit':
+            data = request.form
+            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
+            result = cur.fetchone()
+            if result is None :
+                return render_template("login.html" , content="Fields cant be blank" )
+            if result[1] == data["userEmail"] and result[2]==data["userPassword"]:
+                return redirect(url_for("user" , usr=data["userEmail"] ))
+            if result[1] == data["userEmail"] and result[2]!=data["userPassword"]:
+            
+                return render_template("login.html" , content="Incorrect Password" )
+            
+
+            
+        if request.form['submit_button'] == 'register':
+            data = request.form
+            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
+            result = cur.fetchone()
+            if result is None :
+                return render_template("login.html" , content="Fields cant be blank" )
+            if result != None :
+                return render_template("login.html" , content="User Already Exists" )
+            else:
+            #creating a random ID for user. 
+                ascii_values = [ord(c) for c in data["userEmail"]]
+                id = randint(1,999) + sum(ascii_values)
+                cur.execute("INSERT INTO USERS VALUES(?,?,?)", (id, data["userEmail"] , data["userPassword"]))
+                con.commit()
+                
+                return redirect(url_for("user" , usr=data["userEmail"] ))
+        if request.form['submit_button'] == 'Delete':
+            data = request.form
+            cur.execute("SELECT * FROM USERS where email = ?",[data["userEmail"]])
+            result = cur.fetchone()
+            if result is None :
+                return render_template("login.html" , content="Fields cant be blank" )
+            if result[1] == data["userEmail"] and result[2]==data["userPassword"]:
+                cur.execute("DELETE FROM USERS where email = ? ",[data["userEmail"]])
+                con.commit()
+                return render_template("login.html" , content=f"User {result[1]} has been deleted" )
+            if result[1] == data["userEmail"] and result[2]!=data["userPassword"]:
+                return render_template("login.html" , content="Could not delete account: Incorrect Credentials" )
+           
+            
+            
+
+>>>>>>> Stashed changes
     #return render_template("formdata.html" ,  content=response )
     ## Return the extracted information  
 
